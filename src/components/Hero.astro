@@ -1,0 +1,34 @@
+---
+import { baseUrl } from '@/utils/functions';
+const logo = baseUrl('/assets/css-logo.svg');
+---
+
+<section class="am-hero">
+  <h1>
+    20 PROJECTS WITH CSS <img src={logo} alt='Logo' />
+  </h1>
+</section>
+<style>
+  .am-hero {
+    height: 100vh;
+    position: relative;
+  }
+
+  h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5vmax;
+    text-align: center;
+    text-wrap: balance;
+    color: transparent;
+    background-image: var(--gradient);
+    background-clip: text;
+
+    img {
+      width: 4vmax;
+      transform: translateY(0.3vmax);
+    }
+  }
+</style>

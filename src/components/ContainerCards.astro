@@ -1,0 +1,29 @@
+---
+const arrayCards = [
+  {
+    title: 'Bosque Fondal',
+    repo: 'https://github.com/20essentials/project-000-820',
+    localImage: '/assets/n820.avif',
+    id: '001'
+  }
+];
+---
+
+<section class="am-container-cards">
+  {
+    arrayCards.map(({ id, localImage, repo, title }) => (
+      <aside class='card' />
+    ))
+  }
+</section>
+
+<style>
+  .am-container-cards {
+    min-height: 100vh;
+    display: grid;
+    padding: 2.2vmax;
+    gap: 2.2vmax;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17vmax, 1fr));
+  }
+</style>
