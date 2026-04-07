@@ -24,7 +24,10 @@ export const PERFORMERS = [
   /* ======================= L ======================= */
 
   /* ======================= M ======================= */
-  'Magic System',
+  [
+    'Magic System',
+    'https://20essentials.github.io/project-000-001/assets/m4gic-syst3m'
+  ]
 
   /* ======================= N ======================= */
 

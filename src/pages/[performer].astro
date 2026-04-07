@@ -1,20 +1,33 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import ThePerformer from '@/components/performer/index.astro';
 import { PERFORMERS } from '@/utils/const';
 import { toKebabCase } from '@/utils/functions';
 import type { InferGetStaticParamsType, GetStaticPaths } from 'astro';
 
 export const getStaticPaths = (async () => {
-  return PERFORMERS.map(performer => ({
-    params: { performer: toKebabCase(performer) }
+  return PERFORMERS.map(([performer, baseOfURL]) => ({
+    params: { performer: toKebabCase(performer), baseOfURL }
   }));
 }) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 
-const { performer } = Astro.params as Params;
+const { performer, baseOfURL } = Astro.params as Params;
+
+const getURL = (path: string) => `${baseOfURL}${path}`;
+const logoSrc = getURL('/logo.webp');
+const [poster1, poster2, poster3, poster4] = Array.from({ length: 4 }, (_, i) =>
+  getURL(`/n${i + 1}.avif`)
+);
 ---
 
 <Layout title={performer}>
-
+  <ThePerformer
+    logoSrc={logoSrc}
+    poster1={poster1}
+    poster2={poster2}
+    poster3={poster3}
+    poster4={poster4}
+  />
 </Layout>

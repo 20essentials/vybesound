@@ -8,7 +8,6 @@ interface Props {
 }
 
 const { logoSrc, poster1, poster2, poster3, poster4 } = Astro.props;
-
 import { baseUrl } from '@/utils/functions';
 const homePageSite = import.meta.env.SITE;
 const logo = logoSrc ?? baseUrl('/assets/favicon.webp');
@@ -174,7 +173,14 @@ const spriteCard = baseUrl('/assets/svgSpriteCardMusical.svg');
   </button>
 </nav>
 
-<main>
+<main
+  style={{
+    '--image-1': poster1,
+    '--image-2': poster2,
+    '--image-3': poster3,
+    '--image-4': poster4
+  }}
+>
   {
     Array.from({ length: 20 }, (_, i) => (
       <article class='card' id={`song-${i + 1}`}>
@@ -253,12 +259,12 @@ const spriteCard = baseUrl('/assets/svgSpriteCardMusical.svg');
   }
 
   /******************** VARIABLES ********************/
-  :root {
+  /*   :root {
     --image-1: url('assets/n1.avif');
     --image-2: url('assets/n2.avif');
     --image-3: url('assets/n3.avif');
     --image-4: url('assets/n4.avif');
-  }
+  } */
 
   /******************** ELEMENTS ********************/
   html {

@@ -1,7 +1,10 @@
 import { PERFORMERS } from '@/utils/const';
 import { baseUrl, toKebabCase } from '@/utils/functions';
 
-const bands = PERFORMERS.map(performer => [performer, toKebabCase(performer)]);
+const bands = PERFORMERS.map(([performer]) => [
+  performer,
+  toKebabCase(performer)
+]);
 
 let d = document,
   $borrar = d.querySelector('.borrar'),
