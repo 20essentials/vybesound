@@ -3,16 +3,30 @@ import '@/styles/global.css';
 import { baseUrl } from '@/utils/functions';
 const favicon = baseUrl('/assets/favicon.webp');
 const { title = 'VybeSound' } = Astro.props;
+const homePageSite = import.meta.env.SITE;
+const urlCurrentPage = homePageSite ?? homePageSite;
 ---
 
 <!doctype html>
 <html lang='en'>
   <head>
-    <meta charset='UTF-8' />
-    <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href={favicon} />
+    <title translate='no'>{title}</title>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='description' content='(>‿◠)✌' />
+    <meta property='og:type' content='website' />
+    <meta property='og:title' content={title} />
+    <meta property='og:url' content={urlCurrentPage} />
+    <meta property='og:image' content={baseUrl('/assets/preview.avif')} />
+    <meta property='og:description' content='(>‿◠)✌' />
+    <meta property='twitter:card' content='summary_large_image' />
+    <meta property='twitter:title' content={title} />
+    <meta property='twitter:url' content={urlCurrentPage} />
+    <meta property='twitter:image' content={baseUrl('/assets/preview.avif')} />
+    <meta property='twitter:description' content='(>‿◠)✌' />
     <meta name='google' content='notranslate' />
-    <title>{title}</title>
+    <meta name='theme-color' content='#000' />
   </head>
   <body>
     <slot />
