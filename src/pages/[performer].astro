@@ -6,16 +6,16 @@ import { toKebabCase } from '@/utils/functions';
 import type { InferGetStaticParamsType, GetStaticPaths } from 'astro';
 
 export const getStaticPaths = (async () => {
-  return PERFORMERS.map(([performer, baseOfURL, nameOfSongs]) => ({
+  return PERFORMERS.map(([performer, baseOfURL, arrayNameOfS0ngs]) => ({
     params: { performer: toKebabCase(performer), baseOfURL },
-    props: { nameOfSongs }
+    props: { arrayNameOfS0ngs }
   }));
 }) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 
 const { performer, baseOfURL } = Astro.params as Params;
-const { nameOfSongs } = Astro.props;
+const { arrayNameOfS0ngs } = Astro.props;
 
 const getURL = (path: string) => `${baseOfURL}${path}`;
 const logoSrc = getURL('/logo.webp');
@@ -31,5 +31,7 @@ const [poster1, poster2, poster3, poster4] = Array.from({ length: 4 }, (_, i) =>
     poster2={poster2}
     poster3={poster3}
     poster4={poster4}
+    performer={performer}
+    arrayNameOfS0ngs={arrayNameOfS0ngs}
   />
 </Layout>

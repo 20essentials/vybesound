@@ -5,6 +5,8 @@ interface Props {
   poster2?: string;
   poster3?: string;
   poster4?: string;
+  performer?: string;
+  arrayNameOfS0ngs?: string[];
 }
 
 const { logoSrc, poster1, poster2, poster3, poster4 } = Astro.props;
@@ -129,15 +131,11 @@ const spriteCard = baseUrl('/assets/svgSpriteCardMusical.svg');
     </svg>
   </button>
 
-  <button
-    class='recarga am-the-button-recarga'
-  >
+  <button class='recarga am-the-button-recarga'>
     <svg>
       <use href={`${sprite}#reloadbutton`}></use>
     </svg>
   </button>
-
- 
 
   <a href='javascript:void(0)' class='nav-arrow-down'>
     <svg>
