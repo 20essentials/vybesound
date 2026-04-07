@@ -1,14 +1,9 @@
-/******************** DINAMICO LOCAL STORAGE ********************/
-
-import { baseUrl } from '@/utils/functions';
-
-let nameSongs = [];
-let arraySongs = [];
-let lastNameCard = null;
-let listNumbersSongs = [];
-let arrayPosters = [];
+/******************** SONGS ********************/
+import { nameBand, nameSongs } from './config.js';
 
 const MAXIMUM_LENGTH_OF_PLAYLIST = 20;
+const arraySongs = Array.from({ length: MAXIMUM_LENGTH_OF_PLAYLIST }, (_, i) => `songs/n${i + 1}.mp3`);
+
 function updateRowsModalAndButtonActive() {
   setTimeout(() => {
     updateButtonNavActive($('.am-button-nav-modal.order'), 'button-nav-selected');
@@ -16,41 +11,10 @@ function updateRowsModalAndButtonActive() {
   }, 50);
 }
 
-if (localStorage.getItem('lastNameCardClicked')) {
-  lastNameCard = localStorage.getItem('lastNameCardClicked');
-  let listNameCards = JSON.parse(localStorage.getItem('listname-cards'));
-  let currentArray = listNameCards[lastNameCard];
-  if (currentArray.length > 0) {
-    nameSongs = currentArray.map(el => {
-      let name = el[0].replace(/\&amp\;/g, '&');
-      return name?.trim();
-    });
-
-    arraySongs = currentArray.map(el => el[1]);
-    arrayPosters = arraySongs.map((linkPoster, i) => {
-      const numPhoto = (i % 4) + 1;
-      return linkPoster.replace(
-        /\/songs\/n\d+\.mp3/,
-        `/assets/n${numPhoto}.avif`
-      );
-    });
-  }
-}
-
-document.addEventListener('visibilitychange', function () {
-  if (!document.hidden) {
-    localStorage.setItem('playbackUrl', location.href);
-  } else {
-    history.replaceState(null, '', location.pathname + location.search);
-  }
-});
-
-localStorage.setItem('iframeUrl', location.href);
-
 /******************** MEDIA SESSION CONFIG ********************/
-const playlist = nameSongs.map((song, i) => ({
-  title: song,
-  artist: lastNameCard,
+const playlist = Array.from({ length: MAXIMUM_LENGTH_OF_PLAYLIST }, (_, i) => ({
+  title: nameSongs[i]?.trim(),
+  artist: nameBand,
   url: arraySongs[i]
 }));
 
@@ -70,18 +34,29 @@ function toCapitalize(text = '') {
 }
 
 function updateMetadata(currentIndex = 0) {
+  let currentUrl =
+    window
+      .getComputedStyle(
+        document.querySelectorAll('.card')[currentIndex].querySelector('.img')
+      )
+      .getPropertyValue('background-image') ?? '1';
+  let indexPosition = currentUrl.search(/\/n\d/);
+  let imageNumber = currentUrl.slice(indexPosition + 2, indexPosition + 3).trim();
+
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: `${toCapitalize(playlist[currentIndex]?.title ?? '')}`,
-    artist: `${toCapitalize(playlist[currentIndex]?.artist ?? '')}`,
+    title: `${toCapitalize(playlist[currentIndex].title)}`,
+    artist: `${toCapitalize(playlist[currentIndex].artist)}`,
     artwork: [
       {
-        src: arrayPosters[currentIndex] ?? '',
+        src: `assets/n${imageNumber}.avif`,
         sizes: '128x128',
         type: 'image/avif'
       }
     ]
   });
 }
+
+updateMetadata();
 
 navigator.mediaSession.setActionHandler('play', () => {
   $audio.play();
@@ -97,6 +72,14 @@ navigator.mediaSession.setActionHandler('seekbackward', details => {
   $audio.currentTime = Math.max($audio.currentTime - 10, 0);
 });
 
+navigator.mediaSession.setActionHandler('seekto', details => {
+  if (details.fastSeek && 'fastSeek' in $audio) {
+    $audio.fastSeek(details.seekTime);
+  } else {
+    $audio.currentTime = details.seekTime;
+  }
+});
+
 navigator.mediaSession.setActionHandler('seekforward', details => {
   $audio.currentTime = Math.min($audio.currentTime + 10, $audio.duration);
 });
@@ -104,7 +87,9 @@ navigator.mediaSession.setActionHandler('seekforward', details => {
 function previousTrack(currentIndex) {
   navigator.mediaSession.setActionHandler('previoustrack', () => {
     currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-    updateMetadata(currentIndex);
+    updateMetadata(currentIndex); // Actualizar la metadata
+    blockPlayPauseStopBUTTON();
+    _removeClassBlockedButtonNextSiblings(currentIndex);
     $audio.pause();
     $audio.currentTime = 0;
     $audio.src = arraySongs[currentIndex];
@@ -118,14 +103,15 @@ function previousTrack(currentIndex) {
 function nextTrack(currentIndex) {
   navigator.mediaSession.setActionHandler('nexttrack', () => {
     currentIndex = (currentIndex + 1) % playlist.length;
-    updateMetadata(currentIndex);
+    updateMetadata(currentIndex); // Actualizar la metadata
+    blockPlayPauseStopBUTTON();
+    _removeClassBlockedButtonNextSiblings(currentIndex);
     $audio.pause();
     $audio.currentTime = 0;
     $audio.src = arraySongs[currentIndex];
     $audio.loop = false;
     actualButtonPlayActive(currentIndex);
     previousTrack(currentIndex);
-    showTitle(currentIndex);
   });
 }
 
@@ -134,15 +120,8 @@ const d = document;
 const $ = el => d.querySelector(el);
 const $$ = el => d.querySelectorAll(el);
 let regExP = /^(?![\s0-9\-_])[\w\s\-]{1,20}(?<![\-])$/;
+let listNumbersSongs = [];
 
-(function lastLogoClicked() {
-  $('.myHeader img').src =
-    localStorage?.getItem('lastLogoPlaylistClicked') ??
-    baseUrl('/assets/favicon.webp');
-})();
-
-const nameBand = lastNameCard ?? 'Without name';
-$('.namePlaylist').innerHTML = nameBand;
 const $audio = d.createElement('audio');
 
 const navRandomButton = '.nav-random-button';
@@ -175,45 +154,7 @@ const headerColors = {
   15: ['#b429f9', '#e0a9bb', '#26c5f3', '#4169e1']
 };
 
-function firstPhotoUrl(urlParameter) {
-  const newUrl = urlParameter.replace(/n\d{1,2}\.avif/gi, 'n1.avif');
-  return newUrl;
-}
-
 /******************** FUNCTIONS ********************/
-(function generaCardImages() {
-  const { length } = arrayPosters;
-  const $cards = $$('.card');
-  for (let index = 0; index < length; index++) {
-    const card = $cards[index];
-    const imageUrl = arrayPosters[index];
-    const fallbackImage = firstPhotoUrl(imageUrl);
-
-    const testImg = new Image();
-
-    testImg.onload = function () {
-      card.style.setProperty(
-        '--image-bg',
-        `url('${imageUrl}'), linear-gradient(90deg, #ffffff33, #ffffff80, #ffffff33)`
-      );
-    };
-
-    testImg.onerror = function () {
-      card.style.setProperty(
-        '--image-bg',
-        `url('${fallbackImage}'), linear-gradient(90deg, #ffffff33, #ffffff80, #ffffff33)`
-      );
-    };
-
-    testImg.src = imageUrl;
-  }
-})();
-
-const blockPlayPauseStopBUTTON = () => {
-  [...$$('.card-pausebutton')].forEach(el => el.classList.add('blocked'));
-  [...$$('.card-stopbutton')].forEach(el => el.classList.add('blocked'));
-  [...$$('.card-infinitybutton')].forEach(el => el.classList.add('blocked'));
-};
 
 const generateStars = (totalStars, selector, size, duration) => {
   const shadowLayers = [];
@@ -231,6 +172,12 @@ const generateStars = (totalStars, selector, size, duration) => {
   star.style.setProperty('--shadow-layer', shadowLayers.join(','));
   star.style.setProperty('--size', size);
   star.style.setProperty('--duration', duration);
+};
+
+const blockPlayPauseStopBUTTON = () => {
+  [...$$('.card-pausebutton')].forEach(el => el.classList.add('blocked'));
+  [...$$('.card-stopbutton')].forEach(el => el.classList.add('blocked'));
+  [...$$('.card-infinitybutton')].forEach(el => el.classList.add('blocked'));
 };
 
 const removeClassBlockedButtonNextSiblings = el => {
@@ -285,10 +232,10 @@ const toKebabCase = (sentence = '') => {
     : words.join('-').toLowerCase();
 };
 
-const putTitle = title => (d.title = `${title}`);
+const putTitle = (nameBand, title) => (d.title = `${nameBand} - ${title}`);
 
 const showTitle = elIndex => {
-  putTitle(nameSongs[elIndex]);
+  putTitle(nameBand, nameSongs[elIndex]);
 };
 
 const playAllSongs = (songs, selector) => {
@@ -335,7 +282,6 @@ const playAllSongs = (songs, selector) => {
           index--;
           currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
           if (index === -1) index = currentIndex + 1;
-
           nextTrack(currentIndex);
           actualAudio(currentIndex);
         });
@@ -373,9 +319,10 @@ const playRandomSongs = (songs, selector) => {
   }
 
   let unArray = [],
+    i,
     valor;
 
-  for (let i = 0; i < songs.length; i++) {
+  for (i = 0; i < songs.length; i++) {
     do {
       valor = Math.floor(Math.random() * songs.length);
     } while (unArray.includes(valor));
@@ -527,41 +474,24 @@ generateStars(200, '.star-1', '2px', '20s');
 })();
 
 (function addTitlesToCards() {
-  [...$$('.card-right-top')].forEach((title, index) => {
-    if (!nameSongs[index]) {
-      $$('.card')[index].style.pointerEvents = 'none';
-      $$('.card')[index].style.opacity = '0.3';
-      let buttons = $$('.card')[index].querySelector(
-        '.card-right .card-right-buttons'
-      );
-      [...buttons.querySelectorAll('button')].forEach(
-        el => (el.style.pointerEvents = 'none')
-      );
-      [...buttons.querySelectorAll('a')].forEach(el =>
-        el.classList.remove('pointerEventsActivo')
-      );
-      [...buttons.querySelectorAll('.buttonConPointerEvents')].forEach(el =>
-        el.classList.remove('buttonConPointerEvents')
-      );
-    }
-    title.innerHTML = nameSongs[index] || '';
-    title.closest('.card').dataset.url = arraySongs[index];
-  });
+  $$('.card-right-top').forEach(
+    (title, index) => (title.textContent = nameSongs[index])
+  );
 })();
 
 (function addHrefAndDownloads() {
   [...$$('.anchor-download')].forEach((el, i) => {
-    el.href = arraySongs[i] || '';
+    el.href = `songs/n${i + 1}.mp3`;
     let nameBandFirstChar = nameBand[0].toUpperCase();
     let nameBandComplete = nameBand.substring(1).toLowerCase();
     el.download = `${nameBandFirstChar}${nameBandComplete} - ${toCapitalize(
       nameSongs[i]
-    )}.mp3`;
+    )}`;
   });
 })();
 
 (function getHref() {
-  localStorage.setItem('formUrl', location.href);
+  localStorage.setItem('playbackUrl', location.href);
 })();
 
 /******************** EVENT DELEGATION ********************/
@@ -647,14 +577,24 @@ d.addEventListener('click', e => {
   }
 
   if (e.target.matches(cardPlayListButton)) {
+    localStorage.setItem('playbackUrl', location.href);
     let index = [...$$('.card')].indexOf(e.target.closest('.card'));
+    let lastLetterUrl = localStorage.getItem('playbackUrl').at(-1);
+    let urlPuro =
+      lastLetterUrl === '/'
+        ? localStorage.getItem('playbackUrl')
+        : `${localStorage.getItem('playbackUrl')}/`;
+
+    let url = `${urlPuro}songs/n${index + 1}.mp3`;
     let currentNameSong = [...$$('.card')][index].querySelector(
       '.card-right-top'
     ).innerHTML;
+
     localStorage.setItem('lastCurrentNameSong', currentNameSong);
-    localStorage.setItem('ultimoCardIndex', index);
+    localStorage.setItem('lastCurrentURLSong', url);
     RenderPlaylistItems();
     $('.am-modal').showModal();
+
     let $tituloModal = $('.tituto-modal');
     $tituloModal.innerHTML = `Save ${currentNameSong} in..`;
     return;
@@ -717,7 +657,6 @@ d.addEventListener('click', e => {
     updateRowsModalAndButtonActive();
     input.value = '';
   }
-
   /******************** EVENT DELEGATION NAV ********************/
   if (e.target.matches(navPlayButton)) {
     removeClassNavButtonActive();
@@ -769,11 +708,18 @@ d.addEventListener('click', e => {
   }
 });
 
+d.addEventListener('visibilitychange', function () {
+  if (!d.hidden) {
+    localStorage.setItem('playbackUrl', location.href);
+  } else {
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+});
+
 d.addEventListener('change', e => {
   if (e.target.matches(`input[type=checkbox]`)) {
     let currentNameSong = localStorage.getItem('lastCurrentNameSong');
-    let cardCorriente = [...$$('.card')][localStorage.getItem('ultimoCardIndex')];
-    let url = cardCorriente.dataset.url;
+    let url = localStorage.getItem('lastCurrentURLSong');
     let currentId = e.target.id;
     let objectListNameCards = JSON.parse(localStorage.getItem('listname-cards'));
     if (!objectListNameCards) return;
@@ -785,20 +731,22 @@ d.addEventListener('change', e => {
         ...objectListNameCards,
         [`${currentId}`]: [
           ...objectListNameCards[currentId],
-          [currentNameSong, url]
+          [`${nameBand} - ${currentNameSong}`, url]
         ]
       };
 
       localStorage.setItem('listname-cards', JSON.stringify(newObject));
 
       $output.innerHTML = Number($output.innerHTML) + 1;
-      /* RenderPlaylistItems(); */
       return;
     }
 
     let indiceReal = null;
     for (let i = 0; i < objectListNameCards[currentId].length; i++) {
-      if (objectListNameCards[currentId][i][0] === currentNameSong) {
+      if (
+        objectListNameCards[currentId][i][0] ===
+        `${nameBand} - ${currentNameSong}`
+      ) {
         indiceReal = i;
         break;
       }
@@ -813,7 +761,6 @@ d.addEventListener('change', e => {
 
     localStorage.setItem('listname-cards', JSON.stringify(newObject));
     $output.innerHTML = Number($output.innerHTML) - 1;
-    RenderPlaylistItems();
     return;
   }
 });
@@ -902,7 +849,7 @@ function existThisSongInSomePlaylist(currentName) {
       let multiArrayCurrent = objetoNamePlaylists[currentPlaylist];
 
       for (let j = 0; j < multiArrayCurrent.length; j++) {
-        if (multiArrayCurrent[j].includes(nameCurrent.toString())) {
+        if (multiArrayCurrent[j].includes(`${nameBand} - ${nameCurrent}`)) {
           playlistsWhereExistsCurrenName.push(currentPlaylist);
           break;
         }
@@ -943,14 +890,6 @@ function RenderPlaylistItems() {
 
     $containerModal.appendChild(myFragment);
 
-    if (currentName === objectNames?.[guardarKey]?.[19][0]) {
-      setTimeout(() => {
-        let dataclase = toKebabCase(guardarKey);
-        $containerModal.querySelector(`input[data-clase=${dataclase}`).disabled =
-          false;
-      }, 100);
-    }
-
     for (let i = 0; i < arrayCorriente.length; i++) {
       let checkboxCurrent = toKebabCase(arrayCorriente[i]);
       let checkboxActual = $containerModal.querySelector(
@@ -962,17 +901,9 @@ function RenderPlaylistItems() {
   }
 }
 
-function comprobeExistThisProperty(nameProperty) {
-  if (localStorage.getItem('listname-cards')) {
-    let object = JSON.parse(localStorage.getItem('listname-cards'));
-    return object.hasOwnProperty(nameProperty) ? true : false;
-  }
-}
-
 d.addEventListener('DOMContentLoaded', () => {
   blockPlayPauseStopBUTTON();
-  putTitle(nameBand);
-  updateMetadata();
+  putTitle(nameBand, '20 ESSENTIALS');
 });
 
 function findDuplicates(array, element) {
@@ -1020,7 +951,24 @@ function pickCards(allCards, listNumbersSongs) {
   });
 }
 
+function comprobeExistThisProperty(nameProperty) {
+  if (localStorage.getItem('listname-cards')) {
+    let object = JSON.parse(localStorage.getItem('listname-cards'));
+    return object.hasOwnProperty(nameProperty) ? true : false;
+  }
+}
+
+window.addEventListener('storage', e => {
+  if (localStorage.getItem('listname-cards')) {
+    if (e.key === 'listname-cards') {
+      localStorage.setItem('listname-cards', e.newValue);
+      RenderPlaylistItems();
+    }
+  }
+});
+
 /******************** REMOVE ANIMATION VIEW() OF CARDS ********************/
+
 const cards = document.querySelectorAll('.card');
 
 const observer = new IntersectionObserver(
