@@ -1,5 +1,7 @@
 /******************** DINAMICO LOCAL STORAGE ********************/
 
+import { baseUrl } from '@/utils/functions';
+
 let nameSongs = [];
 let arraySongs = [];
 let lastNameCard = null;
@@ -69,11 +71,11 @@ function toCapitalize(text = '') {
 
 function updateMetadata(currentIndex = 0) {
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: `${toCapitalize(playlist[currentIndex].title)}`,
-    artist: `${toCapitalize(playlist[currentIndex].artist)}`,
+    title: `${toCapitalize(playlist[currentIndex]?.title ?? '')}`,
+    artist: `${toCapitalize(playlist[currentIndex]?.artist ?? '')}`,
     artwork: [
       {
-        src: arrayPosters[currentIndex],
+        src: arrayPosters[currentIndex] ?? '',
         sizes: '128x128',
         type: 'image/avif'
       }
@@ -135,7 +137,8 @@ let regExP = /^(?![\s0-9\-_])[\w\s\-]{1,20}(?<![\-])$/;
 
 (function lastLogoClicked() {
   $('.myHeader img').src =
-    localStorage?.getItem('lastLogoPlaylistClicked') ?? 'assets/favicon.png';
+    localStorage?.getItem('lastLogoPlaylistClicked') ??
+    baseUrl('/assets/favicon.webp');
 })();
 
 const nameBand = lastNameCard ?? 'Without name';
@@ -943,9 +946,8 @@ function RenderPlaylistItems() {
     if (currentName === objectNames?.[guardarKey]?.[19][0]) {
       setTimeout(() => {
         let dataclase = toKebabCase(guardarKey);
-        $containerModal.querySelector(
-          `input[data-clase=${dataclase}`
-        ).disabled = false;
+        $containerModal.querySelector(`input[data-clase=${dataclase}`).disabled =
+          false;
       }, 100);
     }
 
