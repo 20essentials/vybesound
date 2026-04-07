@@ -514,11 +514,11 @@ const homePageSite = import.meta.env.SITE;
         pointer-events: none;
         transform: translateY(5px);
         align-content: center;
-        text-transform: capitalize;
         font-size: 0.9rem;
         opacity: 1;
         visibility: visible;
         transition: opacity 0.7s ease;
+        text-transform: capitalize;
 
         &::before {
           content: '+';
@@ -1073,6 +1073,7 @@ const homePageSite = import.meta.env.SITE;
           align-items: center;
           color: #fff;
           overflow-wrap: anywhere;
+          text-transform: uppercase;
 
           @media (width <= 1400px) {
             font-size: clamp(0.6508rem, 0.4794rem + 0.2072vw, 0.54rem);

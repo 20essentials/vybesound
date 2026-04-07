@@ -21,6 +21,11 @@ body {
   --sb-track-color: #000;
   --sb-thumb-color: var(--gradient);
   --sb-size: 0.7vmax;
+  background-color: #000;
+}
+
+html {
+  background-color: #000;
 }
 
 *,
