@@ -1179,7 +1179,7 @@ d.addEventListener('click', e => {
       /.*url\((['"]?)(.*?)\1\).*/,
       (m, _, capturedUrl) => (url = capturedUrl)
     );
-    return `../${url}`;
+    return baseUrl(url);
   }
 
   if (e.target.matches('.card-single-left a')) {

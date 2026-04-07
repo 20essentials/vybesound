@@ -861,8 +861,8 @@ const nameOfSongsString = JSON.stringify(arrayNameOfS0ngs);
         lastLetterUrl === '/'
           ? localStorage.getItem('playbackUrl')
           : `${localStorage.getItem('playbackUrl')}/`;
-
-      let url = `${urlPuro}songs/n${index + 1}.mp3`;
+      // let url = `${urlPuro}songs/n${index + 1}.mp3`;
+      let url = `${baseOfUrlAValue}/n${index + 1}.mp3`;
       let currentNameSong = [...$$('.card')][index].querySelector(
         '.card-right-top'
       ).innerHTML;
@@ -871,7 +871,6 @@ const nameOfSongsString = JSON.stringify(arrayNameOfS0ngs);
       localStorage.setItem('lastCurrentURLSong', url);
       RenderPlaylistItems();
       $('.am-modal').showModal();
-
       let $tituloModal = $('.tituto-modal');
       $tituloModal.innerHTML = `Save ${currentNameSong} in..`;
       return;

@@ -30,8 +30,8 @@ if (localStorage.getItem('lastNameCardClicked')) {
     arrayPosters = arraySongs.map((linkPoster, i) => {
       const numPhoto = (i % 4) + 1;
       return linkPoster.replace(
-        /\/songs\/n\d+\.mp3/,
-        `/assets/n${numPhoto}.avif`
+        /(\/assets\/[^/]+\/)n\d+\.mp3$/,
+        `$1n${numPhoto}.avif`
       );
     });
   }
