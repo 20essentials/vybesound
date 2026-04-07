@@ -1461,6 +1461,7 @@ const nameOfSongsString = JSON.stringify(arrayNameOfS0ngs);
     align-content: center;
     height: 100vh;
     font-size: 16px;
+    
   }
 
   body {
@@ -1472,6 +1473,9 @@ const nameOfSongsString = JSON.stringify(arrayNameOfS0ngs);
       var(--color3)
     );
     --sb-size: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center;
   }
 
   body::-webkit-scrollbar {
@@ -2151,15 +2155,14 @@ const nameOfSongsString = JSON.stringify(arrayNameOfS0ngs);
   main {
     width: 100%;
     max-width: 1600px;
-    height: max-content;
     position: relative;
     padding: 1rem;
     display: grid;
+    height: max-content;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-template-rows: repeat(auto-fit, auto);
     align-content: start;
     gap: 1rem;
-    flex-grow: 1;
 
     .card {
       height: 150px;

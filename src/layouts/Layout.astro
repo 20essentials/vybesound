@@ -1,12 +1,12 @@
 ---
 interface Props {
   title?: string;
+  bodyClassname?: string;
 }
-
 import '@/styles/global.css';
 import { baseUrl } from '@/utils/functions';
 const favicon = baseUrl('/assets/favicon.webp');
-const { title = 'VybeSound' } = Astro.props;
+const { title = 'VybeSound', bodyClassname = '' } = Astro.props;
 const homePageSite = import.meta.env.SITE;
 const currentUrl = Astro.url.href;
 const urlCurrentPage = currentUrl ?? homePageSite;
@@ -33,7 +33,7 @@ const urlCurrentPage = currentUrl ?? homePageSite;
     <meta name='google' content='notranslate' />
     <meta name='theme-color' content='#000' />
   </head>
-  <body>
+  <body class={bodyClassname}>
     <slot />
   </body>
 </html>
