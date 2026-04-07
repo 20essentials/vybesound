@@ -1,4 +1,7 @@
-export const PERFORMERS = [
+import { M4GIC_SYSTEM } from './performers/m4gic-system';
+import type { ArrayItemPerformer } from './types';
+
+export const PERFORMERS: ArrayItemPerformer[] = [
   /* ======================= A ======================= */
 
   /* ======================= B ======================= */
@@ -24,10 +27,7 @@ export const PERFORMERS = [
   /* ======================= L ======================= */
 
   /* ======================= M ======================= */
-  [
-    'Magic System',
-    'https://20essentials.github.io/project-000-001/assets/m4gic-syst3m'
-  ]
+  M4GIC_SYSTEM
 
   /* ======================= N ======================= */
 

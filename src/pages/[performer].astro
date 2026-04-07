@@ -6,14 +6,16 @@ import { toKebabCase } from '@/utils/functions';
 import type { InferGetStaticParamsType, GetStaticPaths } from 'astro';
 
 export const getStaticPaths = (async () => {
-  return PERFORMERS.map(([performer, baseOfURL]) => ({
-    params: { performer: toKebabCase(performer), baseOfURL }
+  return PERFORMERS.map(([performer, baseOfURL, nameOfSongs]) => ({
+    params: { performer: toKebabCase(performer), baseOfURL },
+    props: { nameOfSongs }
   }));
 }) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 
 const { performer, baseOfURL } = Astro.params as Params;
+const { nameOfSongs } = Astro.props;
 
 const getURL = (path: string) => `${baseOfURL}${path}`;
 const logoSrc = getURL('/logo.webp');
