@@ -1,10 +1,12 @@
 ---
 import { PERFORMERS } from '@/utils/const';
+import { toKebabCase } from '@/utils/functions';
 import type { InferGetStaticParamsType, GetStaticPaths } from 'astro';
 
-
 export const getStaticPaths = (async () => {
-  return PERFORMERS.map(performer => ({ params: { performer } }));
+  return PERFORMERS.map(performer => ({
+    params: { performer: toKebabCase(performer) }
+  }));
 }) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
