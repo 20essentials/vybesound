@@ -2,7 +2,10 @@
 import { nameBand, nameSongs } from './config.js';
 
 const MAXIMUM_LENGTH_OF_PLAYLIST = 20;
-const arraySongs = Array.from({ length: MAXIMUM_LENGTH_OF_PLAYLIST }, (_, i) => `songs/n${i + 1}.mp3`);
+const arraySongs = Array.from(
+  { length: MAXIMUM_LENGTH_OF_PLAYLIST },
+  (_, i) => `songs/n${i + 1}.mp3`
+);
 
 function updateRowsModalAndButtonActive() {
   setTimeout(() => {
@@ -615,6 +618,13 @@ d.addEventListener('click', e => {
   if (e.target.matches('.container-add-playlist')) {
     e.target.classList.add('mode-active');
     d.getElementById('agregarPlaylistInput').focus();
+    return;
+  }
+  if (e.target.matches('.am-the-button-recarga')) {
+    const url = localStorage.getItem('playbackUrl');
+    if (url) {
+      location.replace(url);
+    }
     return;
   }
 

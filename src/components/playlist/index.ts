@@ -678,6 +678,14 @@ d.addEventListener('click', e => {
     return;
   }
 
+  if (e.target.matches('.am-the-button-recarga')) {
+    const url = localStorage.getItem('iframeUrl');
+    if (url) {
+      location.replace(url);
+    }
+    return;
+  }
+
   if (e.target.matches('.container-inputs input[type=submit]')) {
     let input = e.target.previousElementSibling.previousElementSibling;
     let inputValor =
