@@ -1,5 +1,6 @@
 ---
 import { baseUrl } from '@/utils/functions';
+const homePageSite = import.meta.env.SITE;
 ---
 
 <header class='myHeader'>
@@ -104,7 +105,7 @@ import { baseUrl } from '@/utils/functions';
 </dialog>
 
 <nav class='myNav'>
-  <a class='home' href='https://20essentials.github.io/20TracksForEachOne/'>
+  <a class='home' href={homePageSite}>
     <svg>
       <use href={baseUrl('/assets/svgSprite.svg#homebutton')}></use>
     </svg>
