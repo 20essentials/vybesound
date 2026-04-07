@@ -4,7 +4,8 @@ import { baseUrl } from '@/utils/functions';
 const favicon = baseUrl('/assets/favicon.webp');
 const { title = 'VybeSound' } = Astro.props;
 const homePageSite = import.meta.env.SITE;
-const urlCurrentPage = homePageSite ?? homePageSite;
+const currentUrl = Astro.url.href;
+const urlCurrentPage = currentUrl ?? homePageSite;
 ---
 
 <!doctype html>
