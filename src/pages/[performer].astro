@@ -1,9 +1,10 @@
 ---
+import { PERFORMERS } from '@/utils/const';
 import type { InferGetStaticParamsType, GetStaticPaths } from 'astro';
 
-// https://docs.astro.build/en/reference/routing-reference/#getstaticpaths
+
 export const getStaticPaths = (async () => {
-  return [{ params: { performer: 'Sh4kira' } }];
+  return PERFORMERS.map(performer => ({ params: { performer } }));
 }) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
