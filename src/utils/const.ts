@@ -1,6 +1,8 @@
 import { M4GIC_SYSTEM } from './performers/m4gic-system';
 import { S1M } from './performers/s1m';
 import { S3RENA } from './performers/s3rena';
+import { SPAND4U_B4LLET } from './performers/spand4u-b4llet';
+import { SURF_CURSE } from './performers/surf-curs3';
 import type { ArrayItemPerformer } from './types';
 
 export const PERFORMERS: ArrayItemPerformer[] = [
@@ -44,6 +46,8 @@ export const PERFORMERS: ArrayItemPerformer[] = [
   /* ======================= S ======================= */
   S1M,
   S3RENA,
+  SURF_CURSE,
+  SPAND4U_B4LLET,
 
   /* ======================= T ======================= */
 
