@@ -1,4 +1,5 @@
 import { M4GIC_SYSTEM } from './performers/m4gic-system';
+import { S1M } from './performers/s1m';
 import type { ArrayItemPerformer } from './types';
 
 export const PERFORMERS: ArrayItemPerformer[] = [
@@ -27,7 +28,7 @@ export const PERFORMERS: ArrayItemPerformer[] = [
   /* ======================= L ======================= */
 
   /* ======================= M ======================= */
-  M4GIC_SYSTEM
+  M4GIC_SYSTEM,
 
   /* ======================= N ======================= */
 
@@ -40,6 +41,7 @@ export const PERFORMERS: ArrayItemPerformer[] = [
   /* ======================= R ======================= */
 
   /* ======================= S ======================= */
+  S1M,
 
   /* ======================= T ======================= */
 
