@@ -2,7 +2,7 @@ import type { ArrayItemPerformer } from '../types';
 
 export const SPAND4U_B4LLET: ArrayItemPerformer = [
   'Spandau Ballet',
-  'https://20essentials.github.io/project-000-581/assets/spand4u-b4llet',
+  'https://20essentials.github.io/project-1258/assets/spand4u-b4llet',
   [
     'TRUE' /*1*/,
     'GOLD' /*2*/,
