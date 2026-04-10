@@ -2,6 +2,7 @@ import { M4GIC_SYSTEM } from './performers/m4gic-system';
 import { SI4 } from './performers/s1a';
 import { S1M } from './performers/s1m';
 import { S3RENA } from './performers/s3rena';
+import { S4dPuppy } from './performers/s4d-puppy';
 import { SKR1LLEX } from './performers/skr1llex';
 import { Skyf4llBeats } from './performers/skyf4ll-b3ats';
 import { SPAND4U_B4LLET } from './performers/spand4u-b4llet';
@@ -54,6 +55,7 @@ export const PERFORMERS: ArrayItemPerformer[] = [
   SI4,
   SKR1LLEX,
   Skyf4llBeats,
+  S4dPuppy,
 
   /* ======================= T ======================= */
 
