@@ -6,6 +6,7 @@ import { S4dPuppy } from './performers/s4d-puppy';
 import { SKR1LLEX } from './performers/skr1llex';
 import { Skyf4llBeats } from './performers/skyf4ll-b3ats';
 import { SPAND4U_B4LLET } from './performers/spand4u-b4llet';
+import { St3vieWond3r } from './performers/st3vie-wond3r';
 import { SURF_CURSE } from './performers/surf-curs3';
 import type { ArrayItemPerformer } from './types';
 
@@ -56,6 +57,7 @@ export const PERFORMERS: ArrayItemPerformer[] = [
   SKR1LLEX,
   Skyf4llBeats,
   S4dPuppy,
+  St3vieWond3r,
 
   /* ======================= T ======================= */
 
