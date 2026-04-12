@@ -3,6 +3,7 @@ import { SI4 } from './performers/s1a';
 import { S1M } from './performers/s1m';
 import { S3RENA } from './performers/s3rena';
 import { S4dPuppy } from './performers/s4d-puppy';
+import { s4ngiov4nni } from './performers/s4ngiov4nni';
 import { SKR1LLEX } from './performers/skr1llex';
 import { Skyf4llBeats } from './performers/skyf4ll-b3ats';
 import { SPAND4U_B4LLET } from './performers/spand4u-b4llet';
@@ -58,6 +59,7 @@ export const PERFORMERS: ArrayItemPerformer[] = [
   Skyf4llBeats,
   S4dPuppy,
   St3vieWond3r,
+  s4ngiov4nni,
 
   /* ======================= T ======================= */
 
