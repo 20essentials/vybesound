@@ -1,86 +1,40 @@
-import { M4GIC_SYSTEM } from './performers/m4gic-system';
-import { PTASINSKI } from './performers/ptasinski';
-import { SI4 } from './performers/s1a';
-import { S1M } from './performers/s1m';
-import { S3RENA } from './performers/s3rena';
-import { S4dPuppy } from './performers/s4d-puppy';
-import { SaintMotel } from './performers/s4int-mot3l';
-import { s4ngiov4nni } from './performers/s4ngiov4nni';
-import { seb4stianIngr0sso } from './performers/seb4stian-ingr0sso';
-import { SKR1LLEX } from './performers/skr1llex';
-import { Skyf4llBeats } from './performers/skyf4ll-b3ats';
-import { SPAND4U_B4LLET } from './performers/spand4u-b4llet';
-import { St3vieWond3r } from './performers/st3vie-wond3r';
-import { SURF_CURSE } from './performers/surf-curs3';
 import type { ArrayItemPerformer } from './types';
 
+const performerFiles = Object.values(
+  import.meta.glob('./performers/*.ts', { eager: true })
+);
+const performersArray = Object.values(performerFiles).map(key => {
+  return Object.values(key!).flat();
+});
+
 export const PERFORMERS: ArrayItemPerformer[] = [
+  ...performersArray
   /* ======================= A ======================= */
-
   /* ======================= B ======================= */
-
   /* ======================= C ======================= */
-
   /* ======================= D ======================= */
-
   /* ======================= E ======================= */
-
   /* ======================= F ======================= */
-
   /* ======================= G ======================= */
-
   /* ======================= H ======================= */
-
   /* ======================= I ======================= */
-
   /* ======================= J ======================= */
-
   /* ======================= K ======================= */
-
   /* ======================= L ======================= */
-
   /* ======================= M ======================= */
-  M4GIC_SYSTEM,
-
   /* ======================= N ======================= */
-
   /* ======================= O ======================= */
-
   /* ======================= P ======================= */
-
   /* ======================= Q ======================= */
-
   /* ======================= R ======================= */
-
   /* ======================= S ======================= */
-  S1M,
-  S3RENA,
-  SURF_CURSE,
-  SPAND4U_B4LLET,
-  SI4,
-  SKR1LLEX,
-  Skyf4llBeats,
-  S4dPuppy,
-  St3vieWond3r,
-  s4ngiov4nni,
-  seb4stianIngr0sso,
-  SaintMotel,
-  PTASINSKI,
-
   /* ======================= T ======================= */
-
   /* ======================= U ======================= */
-
   /* ======================= V ======================= */
-
   /* ======================= W ======================= */
-
   /* ======================= X ======================= */
-
   /* ======================= Y ======================= */
-
   /* ======================= Z ======================= */
-
   /* ======================= 0 ======================= */
   /* ======================= 1 ======================= */
   /* ======================= 2 ======================= */
