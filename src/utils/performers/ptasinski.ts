@@ -1,7 +1,7 @@
 import type { ArrayItemPerformer } from '../types';
 
 export const PTASINSKI: ArrayItemPerformer = [
-  'PTASINSKI',
+  'Ptasinski',
   'https://20essentials.github.io/project-000-002/assets/pt4sinski',
   [
     'LIGHT' /*1*/,
