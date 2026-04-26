@@ -1,4 +1,5 @@
 import { M4GIC_SYSTEM } from './performers/m4gic-system';
+import { PTASINSKI } from './performers/ptasinski';
 import { SI4 } from './performers/s1a';
 import { S1M } from './performers/s1m';
 import { S3RENA } from './performers/s3rena';
@@ -64,6 +65,7 @@ export const PERFORMERS: ArrayItemPerformer[] = [
   s4ngiov4nni,
   seb4stianIngr0sso,
   SaintMotel,
+  PTASINSKI,
 
   /* ======================= T ======================= */
 
