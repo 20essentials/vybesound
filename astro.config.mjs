@@ -7,6 +7,6 @@ export default defineConfig({
   },
   site: import.meta.env.DEV
     ? 'http://localhost:4321/'
-    : 'https://20essentials.github.io/vybe/',
-  base: import.meta.env.DEV ? undefined : '/vybe/'
+    : 'https://20essentials.github.io/vybesound/',
+  base: import.meta.env.DEV ? undefined : '/vybesound/'
 });
