@@ -758,12 +758,12 @@ const nameOfSongsString = JSON.stringify(arrayNameOfS0ngs);
 
   (function addHrefAndDownloads() {
     [...$$('.anchor-download')].forEach((el, i) => {
-      el.href = `songs/n${i + 1}.mp3`;
+      el.href = arraySongs[i];
       let nameBandFirstChar = nameBand[0].toUpperCase();
       let nameBandComplete = nameBand.substring(1).toLowerCase();
       el.download = `${nameBandFirstChar}${nameBandComplete} - ${toCapitalize(
         nameSongs[i]
-      )}`;
+      )}.mp3`;
     });
   })();
 
@@ -771,8 +771,33 @@ const nameOfSongsString = JSON.stringify(arrayNameOfS0ngs);
     localStorage.setItem('playbackUrl', location.href);
   })();
 
+  async function downloadBlobFile(url, filename) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = d.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      d.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      window.open(url, '_blank', 'noopener');
+    }
+  }
+
   /******************** EVENT DELEGATION ********************/
   d.addEventListener('click', e => {
+    const anchorDownload = e.target.closest('.anchor-download');
+    if (anchorDownload) {
+      e.preventDefault();
+      downloadBlobFile(anchorDownload.href, anchorDownload.download);
+      return;
+    }
+
     /******************** EVENT DELEGATION CARDS ********************/
     if (e.target.matches(cardPlayButtonClass)) {
       if (listNumbersSongs?.length > 0) {

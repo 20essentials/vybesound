@@ -564,8 +564,33 @@ generateStars(200, '.star-1', '2px', '20s');
   localStorage.setItem('formUrl', location.href);
 })();
 
+async function downloadBlobFile(url, filename) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = d.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    d.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(blobUrl);
+  } catch (err) {
+    window.open(url, '_blank', 'noopener');
+  }
+}
+
 /******************** EVENT DELEGATION ********************/
 d.addEventListener('click', e => {
+  const anchorDownload = e.target.closest('.anchor-download');
+  if (anchorDownload) {
+    e.preventDefault();
+    downloadBlobFile(anchorDownload.href, anchorDownload.download);
+    return;
+  }
+
   /******************** EVENT DELEGATION CARDS ********************/
   if (e.target.matches(cardPlayButtonClass)) {
     if (listNumbersSongs?.length > 0) {
